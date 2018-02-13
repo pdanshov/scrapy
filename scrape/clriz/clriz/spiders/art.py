@@ -14,7 +14,18 @@ import scrapy
 class ArtSpider(scrapy.Spider):
     name = "art"
     allowed_domains = ["craigslist.org"]
-    start_urls = ['https://newyork.craigslist.org/search/sss?query=rizzi&sort=rel','https://losangeles.craigslist.org/search/sss?query=rizzi&sort=rel','https://hartford.craigslist.org/search/sss?query=rizzi&sort=rel','https://miami.craigslist.org/search/sss?query=rizzi&sort=rel']
+    start_urls = ['https://newyork.craigslist.org/search/sss?query=rizzi&sort=rel&searchNearby=2&nearbyArea=59&nearbyArea=248&nearbyArea=451&nearbyArea=349&nearbyArea=193&nearbyArea=281&nearbyArea=166&nearbyArea=44&nearbyArea=249&nearbyArea=561&nearbyArea=279&nearbyArea=167&nearbyArea=250&nearbyArea=168&nearbyArea=170&nearbyArea=354&nearbyArea=684&nearbyArea=17&nearbyArea=356&nearbyArea=278&nearbyArea=276&nearbyArea=286&nearbyArea=173&nearbyArea=357','https://losangeles.craigslist.org/search/sss?query=rizzi&sort=rel&searchNearby=2&nearbyArea=63&nearbyArea=43&nearbyArea=709&nearbyArea=455&nearbyArea=104&nearbyArea=26&nearbyArea=285&nearbyArea=96&nearbyArea=565&nearbyArea=102&nearbyArea=103&nearbyArea=209&nearbyArea=8&nearbyArea=191&nearbyArea=62&nearbyArea=710&nearbyArea=181&nearbyArea=208&nearbyArea=346&nearbyArea=370','https://sfbay.craigslist.org/search/sss?query=rizzi&sort=rel&searchNearby=2&nearbyArea=63&nearbyArea=187&nearbyArea=43&nearbyArea=373&nearbyArea=709&nearbyArea=189&nearbyArea=454&nearbyArea=285&nearbyArea=96&nearbyArea=102&nearbyArea=188&nearbyArea=92&nearbyArea=12&nearbyArea=191&nearbyArea=62&nearbyArea=710&nearbyArea=708&nearbyArea=97&nearbyArea=707&nearbyArea=208&nearbyArea=346&nearbyArea=456','https://miami.craigslist.org/search/sss?query=rizzi&sort=rel&searchNearby=2&nearbyArea=238&nearbyArea=330&nearbyArea=125&nearbyArea=219&nearbyArea=639&nearbyArea=376&nearbyArea=333&nearbyArea=39&nearbyArea=237&nearbyArea=331&nearbyArea=557&nearbyArea=37&nearbyArea=332']
+
+    '''
+    nyc+nearby= albany, binghampton, catskills, centralNJ, delaware, easternCT, harrisburgPA, hartfordCT, hudsonValleyNY, JerseyShore, lancasterPA, lehighvalley, LongIsland, NewHavenCT, NorthJersey, NorthwestCT, OneontaNY, Philadelphia, Poconos, ReadingPA, Scranton/wilkesbarre, SouthJersey, WesternMA, YorkPA
+        CL codes(same order as above):
+    LA+nearby=
+        CL codes:
+    SFBay+nearby=
+        CL codes:
+    Miami+nearby= daytonaBch, flkeys, ftmyers/swfl, gainesville, heartlandfl, lakeland, ocala, orlando, sarasota-bradenton, spacecoast, staugustine, tampabay, treasurecoast
+        CL codes: dab, key, fmy, gnv, cfl, lal, oca, orl, srq, mlb, ust, tpa, psl
+    ''' and None
 
     def parse(self, response):
 
