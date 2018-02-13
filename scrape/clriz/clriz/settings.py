@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'clriz.spiders'
 #USER_AGENT = 'clriz (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False #pdanshov, was getting robots.txt results from cl
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

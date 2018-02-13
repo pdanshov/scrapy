@@ -1,11 +1,66 @@
 # -*- coding: utf-8 -*-
+# pdanshov feb 13 2018
+'''
+author: Peter Danshov
+date: Feb 13 2018
+ source: http://python.gotrained.com/scrapy-tutorial-web-scraping-craigslist/
+ run in terminal: scrapy crawl art
+ run for csv export: scapy crawl art -o art_2.13.18.csv
+''' and None
+
 import scrapy
 
 
 class ArtSpider(scrapy.Spider):
-    name = 'art'
-    allowed_domains = ['https://newyork.craigslist.org/search/sss']
-    start_urls = ['http://https://newyork.craigslist.org/search/sss/']
+    name = "art"
+    allowed_domains = ["craigslist.org"]
+    start_urls = ['https://newyork.craigslist.org/search/sss?query=rizzi&sort=rel','https://losangeles.craigslist.org/search/sss?query=rizzi&sort=rel','https://hartford.craigslist.org/search/sss?query=rizzi&sort=rel','https://miami.craigslist.org/search/sss?query=rizzi&sort=rel']
 
     def parse(self, response):
-        pass
+
+### extract just title
+###        titles = response.xpath('//a[@class="result-title hdrlnk"]/text()').extract()
+
+        '''
+        -|extract the a, class="", text between a
+        -|<ahref="https://newyork.craigslist.org/mnh/tix/d/turandot-met-opera-discounted/6493464298.html" data-id="6493464298"
+            class="result-title hdrlnk">
+                Turandot - Met Opera - Discounted Tickets Available</a>
+        -|print(response) - will output a code+url indicating a status of attempt to connect to a website
+        -|print(response.body) - will output the page source code
+        -|when using xpath to extract html nodes, you should directly use reponse.xpath()
+        ''' and None
+
+### basic print titles from title extract above
+##        print(titles)
+
+
+### extract wrapper & sort-select elements within
+        art = response.xpath('//p[@class="result-info"]')
+
+        #we started the XPath expression of “jobs” by // meaning it starts from <html> until this <p> whose class name is  “result-info”.
+
+        for piece in art:
+            title = piece.xpath('a/text()').extract_first()
+            address = piece.xpath('span[@class="result-meta"]/span[@class="result-hood"]/text()').extract_first("")[2:-1]
+            relative_url = piece.xpath('a/@href').extract_first()
+            absolute_url = response.urljoin(relative_url)
+
+            yield{'URL':absolute_url, 'Title':title, 'Address':address}
+
+            '''
+            -|you do not use “response” (which you already used to extract the wrapper). Instead, you use the wrapper selector
+            we started the XPath expression of “title” without any slashes, because it complements or depends on the XPath expression of the job wrapper.
+            -|If you rather want to use slashes, you will have to precede it with a dot to refer to the current node as follows:
+            title = piece.xpath('.//a/text()').extract_first()
+            -|As we explained in the first part of this Scrapy tutorial, a refers to the first <a> tag inside the <p> tag, and text() refers to the text inside the <a> tag which is the job title.
+            -|Here, we are using extract_first() because in each iteration of the loop, we are in a wrapper with only one job.
+            -|To extract the job address, you refer to the <span> tag whose class name is “result-meta” and then the <span> tag whose class name is “result-hood” and then the text() in it. The address is between brackets like (Brooklyn); so if you want to delete them, you can use string slicing [2:-1]. However, this string slicing will not work if there is no address (which is the case for some jobs) because the value will be None which is not a string! So you have to add empty quotes inside extract_first("") which means if there is no result, the result is “”.
+            ''' and None #to invalidate the docstring, e.g: make the context a comment (also if False: ''' ''')
+
+
+
+
+
+
+###        pass
