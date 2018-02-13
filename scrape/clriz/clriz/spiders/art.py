@@ -3,12 +3,14 @@
 '''
 author: Peter Danshov
 date: Feb 13 2018
+version: 1.0
  source: http://python.gotrained.com/scrapy-tutorial-web-scraping-craigslist/
  run in terminal: scrapy crawl art
- run for csv export: scapy crawl art -o art_2.13.18.csv
+ run for csv export: scapy crawl art -o art_x.csv
 ''' and None
 
 import scrapy
+import datetime
 
 
 class ArtSpider(scrapy.Spider):
@@ -19,13 +21,15 @@ class ArtSpider(scrapy.Spider):
     '''
     nyc+nearby= albany, binghampton, catskills, centralNJ, delaware, easternCT, harrisburgPA, hartfordCT, hudsonValleyNY, JerseyShore, lancasterPA, lehighvalley, LongIsland, NewHavenCT, NorthJersey, NorthwestCT, OneontaNY, Philadelphia, Poconos, ReadingPA, Scranton/wilkesbarre, SouthJersey, WesternMA, YorkPA
         CL codes(same order as above):
-    LA+nearby=
+    LA+nearby= bakersfieldCA, fresno/madera, hanford-corcoran, imperialCounty, inlandEmpireCA, lasVegas, mercedCA, modestoCA, mohaveCounty, montereyBay, orangeCountyCA, palmSpringsCA, sanDiego, sanLuisObispo, santaBarbara, santaMariaCA, tijuanaMX, venturaCounty, visalia-tulare, yumaAZ
         CL codes:
-    SFBay+nearby=
+    SFBay+nearby= bakersfieldCA, chicoCA, fresno/madera, goldCountry, hanford-corcoran, humboldtCounty, mendocinoCounty, mercedCA, modestoCA, montereyBay, reddingCA, reno/tahoe, sacramento, sanLuisObispo, santaBarbara, santaMariaCA, siskiyouCounty, stocktonCA, susanvilleCA, venturaCounty, visalia-tulare, yuba-sutterCA
         CL codes:
     Miami+nearby= daytonaBch, flkeys, ftmyers/swfl, gainesville, heartlandfl, lakeland, ocala, orlando, sarasota-bradenton, spacecoast, staugustine, tampabay, treasurecoast
         CL codes: dab, key, fmy, gnv, cfl, lal, oca, orl, srq, mlb, ust, tpa, psl
     ''' and None
+
+
 
     def parse(self, response):
 
@@ -51,13 +55,15 @@ class ArtSpider(scrapy.Spider):
 
         #we started the XPath expression of “jobs” by // meaning it starts from <html> until this <p> whose class name is  “result-info”.
 
+        today = datetime.datetime.now()
+
         for piece in art:
             title = piece.xpath('a/text()').extract_first()
             address = piece.xpath('span[@class="result-meta"]/span[@class="result-hood"]/text()').extract_first("")[2:-1]
             relative_url = piece.xpath('a/@href').extract_first()
             absolute_url = response.urljoin(relative_url)
 
-            yield{'URL':absolute_url, 'Title':title, 'Address':address}
+            yield{'Scrape':today, 'URL':absolute_url, 'Title':title, 'Address':address}
 
             '''
             -|you do not use “response” (which you already used to extract the wrapper). Instead, you use the wrapper selector
