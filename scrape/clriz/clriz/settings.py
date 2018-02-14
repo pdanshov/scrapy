@@ -21,13 +21,22 @@ NEWSPIDER_MODULE = 'clriz.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False #pdanshov, was getting robots.txt results from cl
 
+# pdanshov - arrange spreadsheet column order for crawl command
+FEED_EXPORT_FIELDS = ['Scrape','Title','Address','URL']
+
+# pdanshov - custom user agent string
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'
+
+
+
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 3 # pdanshov - enabled delay to keep from hitting the servers too hard
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
