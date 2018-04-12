@@ -1,0 +1,138 @@
+
+
+Google Spreadsheet
+
+=ImportHtml("https://www.bloomberg.com/news/articles/2018-04-10/to-visit-america-s-richest-zip-code-first-you-ll-need-a-boat", "table", 0)
+
+
+Web Scraper Chrome Extension
+
+
+
+Scrapy (this folder)
+
+
+
+
+
+https://blog.ouseful.info/2008/10/14/data-scraping-wikipedia-with-google-spreadsheets/
+
+OUseful.Info, the blog...
+Trying to find useful things to do with emerging technologies in open education and data journalism
+ABOUT
+EDITORIAL POLICY
+SEARCH
+OCTOBER 14, 2008
+Data Scraping Wikipedia with Google Spreadsheets
+Prompted in part by a presentation I have to give tomorrow as an OU eLearning community session (I hope some folks turn up – the 90 minute session on Mashing Up the PLE – RSS edition is the only reason I’m going in…), and in part by Scott Leslie’s compelling programme for a similar duration Mashing Up your own PLE session (scene scetting here: Hunting the Wily “PLE”), I started having a tinker with using Google spreadsheets as for data table screenscraping.
+
+So here’s a quick summary of (part of) what I found I could do.
+
+The Google spreadsheet function =importHTML(“”,”table”,N) will scrape a table from an HTML web page into a Google spreadsheet. The URL of the target web page, and the target table element both need to be in double quotes. The number N identifies the N’th table in the page (counting starts at 0) as the target table for data scraping.
+
+So for example, have a look at the following Wikipedia page – List of largest United Kingdom settlements by population (found using a search on Wikipedia for uk city population – NOTE: URLs (web addresses) and actual data tables may have changed since this post was written, BUT you should be able to find something similar…):
+
+
+
+Grab the URL, fire up a new Google spreadsheet, and satrt to enter the formula “=importHTML” into one of the cells:
+
+
+
+Autocompletion works a treat, so finish off the expression:
+
+=ImportHtml(“http://en.wikipedia.org/wiki/List_of_largest_United_Kingdom_settlements_by_population&#8221;,”table”,1)
+
+
+
+And as if by magic, a data table appears:
+
+
+
+All well and good – if you want to create a chart or two, why not try the Google charting tools?
+
+Google chart
+
+Where things get really interesting, though, is when you start letting the data flow around…
+
+So for example, if you publish the spreadsheet you can liberate the document in a variety of formats:
+
+
+
+As well publishing the spreadsheet as an HTML page that anyone can see (and that is pulling data from the WIkipedia page, remember), you can also get access to an RSS feed of the data – and a host of other data formats:
+
+
+
+See the “More publishing options” link? Lurvely :-)
+
+
+
+Let’s have a bit of CSV goodness:
+
+
+
+Why CSV? Here’s why:
+
+
+
+Lurvely… :-)
+
+
+
+(NOTE – Google spreadsheets’ CSV generator can be a bit crap at times and may require some fudging (and possibly a loss of data) in the pipe – here’s an example: When a Hack Goes Wrong… Google Spreadsheets and Yahoo Pipes.)
+
+Unfortunately, the *’s in the element names mess things up a bit, so let’s rename them (don’t forget to dump the original row of the feed (alternatively, tweak the CSV URL so it starts with row 2); we might as well create a proper RSS feed too, by making sure we at least have a title and description element in there:
+
+
+
+Make the description a little more palatable using a regular expression to rewrite the description element, and work some magic with the location extractor block (see how it finds the lat/long co-ordinates, and adds them to each item?;-):
+
+DEPRECATED…. The following image is the OLD WAY of doing this and is not to be recommended…
+
+…DEPRECATED
+
+Geocoding in Yahoo Pipes is done more reliably through the following trick – replace the Location Builder block with a Loop block into which you should insert a Location Builder Block
+
+yahoo pipe loop
+
+The location builder will look to a specified element for the content we wish to geocode:
+
+yahoo pipe location builder
+
+The Location Builder block should be configured to output the geocoded result to the y:location element. NOTE: the geocode often assumes US town/city names. If you have a list of town names that you know come from a given country, you may wish to annotate them with a country identify before you try to geocode them. A regular expression block can do this:
+
+regex uk
+
+This block says – in the title element, grab a copy of everything – .* – into a variable – (.*) – and then replace the contents of the title element with it’s original value – $1 – as well as “, UK” – $1, UK
+
+Note that this regular expression block would need to be wired in BEFORE the geocoding Loop block. That is, we want the geocoder to act on a title element containing “Cambridge, UK” for example, rather than just “Cambridge”.
+
+Lurvely…
+
+And to top it all off:
+
+
+
+And for the encore? Grab the KML feed out of the pipe:
+
+
+
+…and shove it in a Google map:
+
+
+So to recap, we have scraped some data from a wikipedia page into a Google spreadsheet using the =importHTML formula, published a handful of rows from the table as CSV, consumed the CSV in a Yahoo pipe and created a geocoded KML feed from it, and then displayed it in a YahooGoogle map.
+
+Kewel :-)
+
+PS If you “own” the web page that a table appears on, there is actually quote a lot you can do to either visualise it, or make it ‘interactive’, with very little effort – see Progressive Enhancement – Some Examples and HTML Tables and the Data Web for more details…
+
+PPS for a version of this post in German, see: http://plerzelwupp.pl.funpic.de/wikitabellen_in_googlemaps/. (Please post a linkback if you’ve translated this post into any other languages :-)
+
+PPPS this is neat – geocoding in Google spreadsheets itself: Geocoding by Google Spreadsheets.
+
+PPPS Once you have scraped the data into a Google spreadsheet, it’s possible to treat it as a database using the QUERY spreadsheet function. For more on the QUERY function, see Using Google Spreadsheets Like a Database – The QUERY Formula and Creating a Winter Olympics 2010 Medal Map In Google Spreadsheets.
+
+
+
+
+
+

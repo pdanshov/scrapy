@@ -2,17 +2,23 @@
 # pdanshov feb 13 2018
 '''
 author: Peter Danshov
-date: Feb 13 2018
-version: 1.0
- source: http://python.gotrained.com/scrapy-tutorial-web-scraping-craigslist/
- run in terminal: scrapy crawl art
- run for csv export: scapy crawl art -o art_x.csv
-version 1.1
- Feb 19th 2018
- added michigan area, and additional states
+date: April 12 2018
+version: 1.1.2
+
+version 1.1.2
+    Apr 12th 2018
+    added variable & loop for counter, for each entry everytime the script runs
 version 1.1.1
- Feb 21st 2018
- added variable for search term, and replaced url's with variable
+    Feb 21st 2018
+    added variable for search term, and replaced url's with variable
+version 1.1
+    Feb 19th 2018
+    added michigan area, and additional states
+version 1.0
+    feb 13th 2018
+     source: http://python.gotrained.com/scrapy-tutorial-web-scraping-craigslist/
+     run in terminal: scrapy crawl art
+     run for csv export: scapy crawl art -o art_x.csv
 ''' and None
 
 import scrapy
@@ -69,13 +75,19 @@ class ArtSpider(scrapy.Spider):
 
         today = datetime.datetime.now()
 
+        counter = 1
+
         for piece in art:
             title = piece.xpath('a/text()').extract_first()
             address = piece.xpath('span[@class="result-meta"]/span[@class="result-hood"]/text()').extract_first("")[2:-1]
             relative_url = piece.xpath('a/@href').extract_first()
             absolute_url = response.urljoin(relative_url)
 
-            yield{'Scrape':today, 'URL':absolute_url, 'Title':title, 'Address':address}
+            count = str(counter)
+
+            yield{'No.':count, 'Scrape':today, 'URL':absolute_url, 'Title':title, 'Address':address}
+
+            counter += 1
 
             '''
             -|you do not use “response” (which you already used to extract the wrapper). Instead, you use the wrapper selector
